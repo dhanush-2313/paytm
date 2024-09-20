@@ -4,8 +4,9 @@ import { authOptions } from "./auth";
 import prisma from "@repo/db/client";
 
 export async function p2pTransfer(to: string, amount: number) {
+    try {
     const session = await getServerSession(authOptions);
-    const from = session?.user?.id;
+    const from = session?.user?.id; 
     if (!from) {
         return {
             message: "Error while sending"
@@ -24,7 +25,6 @@ export async function p2pTransfer(to: string, amount: number) {
     }
 
 
-    try {
         
         await prisma.$transaction(async (tx) => {
             await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(from)} FOR UPDATE`;

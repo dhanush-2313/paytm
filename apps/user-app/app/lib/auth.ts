@@ -62,7 +62,7 @@ export const authOptions = {
           }
           return session;
         },
-        async jwt({ token, user }: { token: JWT; user?: any }) {
+        async jwt({ token, user }:{token:JWT, user: any}) {
           if (user) {
             token.id = user.id;
           }
