@@ -39,7 +39,7 @@ export async function p2pTransfer(to: string, amount: number) {
                 where: { userId: Number(from) },
                 data: { amount: { decrement: amount } },
               });
-    
+              
               await tx.balance.update({
                 where: { userId: toUser.id },
                 data: { amount: { increment: amount } },
