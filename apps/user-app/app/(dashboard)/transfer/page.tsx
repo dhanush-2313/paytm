@@ -29,7 +29,7 @@ async function getOnRampTransactions() {
     return txns.map(t => ({
         time: t.startTime,
         amount: t.amount,
-        status: t.status,
+        status: t.status.toLowerCase() as "success" | "failure" | "processing",
         provider: t.provider
     }))
 }
