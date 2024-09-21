@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bruh123
+      POSTGRES_DB: postgres
+    networks:
+      - my_network
+    ports:
+      - "5432:5432"
+
+  user-app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.userapp
+    environment:
+      DATABASE_URL: postgresql://postgres:bruh123@postgres:5432/postgres
+      WEBHOOK_URL: http://webhook-handler:3003
+      PORT: 3000
+    depends_on:
+      - postgres
+      - webhook-handler
+    networks:
+      - my_network
+    ports:
+      - "3000:3000"
+
+  webhook-handler:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.webhook
+    environment:
+      DATABASE_URL: postgresql://postgres:bruh123@postgres:5432/postgres
+      PORT: 3003
+    depends_on:
+      - postgres
+    networks:
+      - my_network
+    ports:
+      - "3003:3003"
+
+networks:
+  my_network:
+    driver: bridge

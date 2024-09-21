@@ -21,7 +21,7 @@ async function getAllTransactions() {
       userId: Number(session?.user?.id),
     },
   });
-  return transactions.map((t) => ({
+  return transactions.map((t:any) => ({
     time: t.startTime,
     amount: t.amount,
     status: t.status.toLowerCase() as "success" | "failure" | "processing",
@@ -51,7 +51,7 @@ export default async function TransactionsPage() {
       <div className="p-4">
         <Card title="Recent Transactions">
           <div className="pt-2">
-            {transactions.map((t, index) => (
+            {transactions.map((t:any, index:number) => (
               <div key={index} className="flex justify-between items-center py-2">
                 <div>
                   <div className="text-sm flex items-center">
