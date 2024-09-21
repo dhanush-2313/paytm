@@ -1,3 +1,5 @@
+# Dockerfile.userapp
+
 FROM node:20.12.0-alpine3.19
 
 WORKDIR /usr/src/app
@@ -7,11 +9,12 @@ COPY ../package*.json ../turbo.json ../tsconfig.json ./
 COPY apps ./apps/user-app
 COPY packages ./packages
 
-
 RUN npm install
 
-RUN npm run db:generate
+ENV DATABASE_URL=postgresql://postgres:bruh123@db:5432/postgres
 
 RUN npm run build
 
-CMD ["npm", "run", "start-user-app"]
+WORKDIR /usr/src/app/apps/user-app
+
+CMD ["sh", "-c", "npx prisma migrate dev --name init_schema --schema=../../packages/db/prisma/schema.prisma && npx prisma generate --schema=../../packages/db/prisma/schema.prisma && npm run start-user-app"]

@@ -3,10 +3,9 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "db:generate": "npx prisma generate --schema=packages/db/prisma/schema.prisma",
+    "db:generate": "npx prisma migrate dev --name init_schema --schema=packages/db/prisma/schema.prisma",
     "start-user-app": "cd ./apps/user-app && npm run dev",
     "start-webhook-handler": "cd ./apps/webhook-handler && npm run dev"
   },

@@ -1,10 +1,25 @@
+# Dockerfile.webhook
+
 FROM node:20.12.0-alpine3.19
+
 WORKDIR /usr/src/app
+
 COPY ../package*.json ../turbo.json ../tsconfig.json ./
 COPY ../apps/bank-webhook-handler ./apps/bank-webhook-handler
 COPY ../packages ./packages
+
 RUN npm install
-RUN npm run db:generate
-WORKDIR /usr/src/app/apps/bank-webhook-handler
+
+ENV DATABASE_URL=postgresql://postgres:bruh123@db:5432/postgres
+
+# Ensure the schema file is in the correct location
+RUN ls -la ./packages/db/prisma/
+
+# Expose the application port
 EXPOSE 3003
-CMD ["npm", "run", "dev"]
+
+# Set the working directory to the bank-webhook-handler app
+WORKDIR /usr/src/app/apps/bank-webhook-handler
+
+# Run the Prisma commands and then start the application
+CMD ["sh", "-c", "npx prisma migrate dev --name init_schema --schema=../../packages/db/prisma/schema.prisma && npx prisma generate --schema=../../packages/db/prisma/schema.prisma && npm run dev"]
