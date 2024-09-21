@@ -2,12 +2,12 @@ import prisma from "@repo/db/client";
 import { AddMoney } from "../../components/AddMoneyCard";
 import { BalanceCard } from "../../components/BalanceCard";
 import { OnRampTransactions } from "../../components/OnRampTransactions";
-import { getServerSession } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import React from "react";
 
 async function getBalance() {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as Session & { user: { id: string } };
     const balance = await prisma.balance.findFirst({
         where: {
             userId: Number(session?.user?.id)
@@ -20,7 +20,7 @@ async function getBalance() {
 }
 
 async function getOnRampTransactions() {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as Session & { user: { id: string } };
     const txns = await prisma.onRampTransaction.findMany({
         where: {
             userId: Number(session?.user?.id)

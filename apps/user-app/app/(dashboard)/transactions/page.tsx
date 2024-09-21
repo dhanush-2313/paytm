@@ -2,13 +2,23 @@ import { Card } from "@repo/ui/card";
 import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
+import { Session } from "next-auth";
+
+interface ExtendedSession extends Session {
+  user: {
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  };
+}
 
 async function getAllTransactions() {
-    const session = await getServerSession(authOptions);
+  const session = (await getServerSession(authOptions)) as ExtendedSession;
 
   const transactions = await prisma.onRampTransaction.findMany({
     where: {
-        userId: Number(session?.user?.id)
+      userId: Number(session?.user?.id),
     },
   });
   return transactions.map((t) => ({

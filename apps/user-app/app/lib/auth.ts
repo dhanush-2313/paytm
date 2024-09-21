@@ -1,9 +1,9 @@
 import db from "@repo/db/client";
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcrypt";
-import { JWT } from "next-auth/jwt";
+import { NextAuthOptions } from "next-auth";
 
-export const authOptions = {
+export const authOptions:NextAuthOptions = {
     providers: [
       CredentialsProvider({
           name: 'Credentials',
@@ -12,8 +12,7 @@ export const authOptions = {
             password: { label: "Password", type: "password", required: true }
           },
           async authorize(credentials: any) {
-            const salt = await bcrypt.genSalt(17);
-            const hashedPassword = await bcrypt.hash(credentials.password, salt);
+            const hashedPassword = await bcrypt.hash(credentials.password, 10);
             const existingUser = await db.user.findFirst({
                 where: {
                     number: credentials.phone
@@ -21,7 +20,6 @@ export const authOptions = {
             });
 
             if (existingUser) {
-            
                 const passwordValidation = await bcrypt.compare(credentials.password, existingUser.password);
                 if (passwordValidation) {
                     return {
@@ -46,7 +44,7 @@ export const authOptions = {
                     name: user.name,
                     email: user.number
                 }
-            } catch(e) {
+            } catch(e) {  
                 console.error(e);
             }
 
@@ -56,18 +54,11 @@ export const authOptions = {
     ],
     secret: process.env.JWT_SECRET || "secret",
     callbacks: {
-        async session({ token, session }: { token: JWT; session: any }) {
-          if (session.user) {
-            session.user.id = token.sub;
-          }
-          return session;
-        },
-        async jwt({ token, user }:{token:JWT, user: any}) {
-          if (user) {
-            token.id = user.id;
-          }
-          return token;
-        },
-      },
+        async session({ token, session }: any) {
+            session.user.id = token.sub
+
+            return session
+        }
+    }
   }
   
