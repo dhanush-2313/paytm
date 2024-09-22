@@ -25,7 +25,7 @@ If you prefer to run the development environment without Docker, follow these st
 2. Navigate to the `packages/db` directory and run the following commands to set up the database:
 
    ```sh
-   npx prisma migrate dev
+   npx prisma migrate dev --name init
    npx prisma generate
    npx prisma db seed
    ```
@@ -35,23 +35,15 @@ If you prefer to run the development environment without Docker, follow these st
    ```sh
    cd apps/webhook-handler
    npm install
-   npm run dev
+   npm run start
    ```
 
-4. Install dependencies and start the `merchant` app:
+4. Install dependencies and start the `user` app:
 
    ```sh
-   cd ../merchant
+   cd apps/user-app
    npm install
-   npm run dev
-   ```
-
-5. Install dependencies and start the `user` app:
-
-   ```sh
-   cd ../user
-   npm install
-   npm run dev
+   npm run dev/start
    ```
 
 You can edit the ports for the applications in their respective `package.json` files.
