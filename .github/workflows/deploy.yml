@@ -24,7 +24,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.userapp
           push: true
-          tags: dhanush2313/user-app:latest
+          tags: dhanush-2313/user-app:latest
 
       - name: Build and Push Webhook Handler Image
         uses: docker/build-push-action@v2
@@ -32,14 +32,12 @@ jobs:
           context: .
           file: ./docker/Dockerfile.webhook
           push: true
-          tags: dhanush2313/webhook-handler:latest
+          tags: dhanush-2313/webhook-handler:latest
+
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
 
       - name: Push Docker Compose File
-        run: |
-          docker-compose -f docker-compose.yml push
-
-      - name: Verify Pushed User App Image
-        run: docker pull dhanush2313/user-app:latest
-
-      - name: Verify Pushed Webhook Handler Image
-        run: docker pull dhanush2313/webhook-handler:latest
+        run: docker-compose -f docker-compose.yml push
