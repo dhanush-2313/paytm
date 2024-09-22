@@ -41,3 +41,6 @@ jobs:
           file: ./docker/Dockerfile.webhook
           push: true
           tags: dhanush2313/cicd:webhook-handler-latest
+
+      - name: Push Docker Compose File
+        run: docker compose -f docker-compose.yml push
