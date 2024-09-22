@@ -1,5 +1,61 @@
 # Turborepo starter
 
+## Getting Started
+
+This is a Turborepo that uses Docker for containerization.
+
+### Using Docker
+
+To start the development environment with Docker, run the following command:
+
+```sh
+docker-compose up
+```
+
+### Without Docker
+
+If you prefer to run the development environment without Docker, follow these steps:
+
+1. Install dependencies at the root of the monorepo:
+
+   ```sh
+   npm install
+   ```
+
+2. Navigate to the `packages/db` directory and run the following commands to set up the database:
+
+   ```sh
+   npx prisma migrate dev
+   npx prisma generate
+   npx prisma db seed
+   ```
+
+3. Install dependencies and start the `webhook-handler` app:
+
+   ```sh
+   cd apps/webhook-handler
+   npm install
+   npm run dev
+   ```
+
+4. Install dependencies and start the `merchant` app:
+
+   ```sh
+   cd ../merchant
+   npm install
+   npm run dev
+   ```
+
+5. Install dependencies and start the `user` app:
+
+   ```sh
+   cd ../user
+   npm install
+   npm run dev
+   ```
+
+You can edit the ports for the applications in their respective `package.json` files.
+
 This is an official starter Turborepo.
 
 ## Using this example
