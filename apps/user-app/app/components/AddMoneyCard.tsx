@@ -7,7 +7,8 @@ import { useState } from "react";
 import { TextInput } from "@repo/ui/textinput";
 import axios from "axios";
 import { createOnRampTransaction } from "../lib/createOnRampTransaction";
-const url = process.env.WEBHOOK_URL || "http://localhost:3003";
+const webhookUrl = "http://webhook-handler:3003";
+
 
 const SUPPORTED_BANKS = [{
     name: "HDFC Bank",
@@ -40,7 +41,7 @@ export const AddMoney = () => {
             <Button onClick={async() => {
                 try {
                     const {userId,token,amount} = await createOnRampTransaction(amountt,provider);
-                    await axios.post(`${url}/hdfcWebhook`, {
+                    await axios.post(`${webhookUrl}/hdfcWebhook`, {
                         token,
                         user_identifier: userId,
                         amount
