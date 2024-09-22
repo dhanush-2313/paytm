@@ -5,8 +5,8 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "db:generate": "npx prisma migrate dev --name init_schema --schema=packages/db/prisma/schema.prisma",
-    "start-user-app": "cd ./apps/user-app && npm run dev",
+    "db:generate": "cd packages/db && npx prisma generate && cd ../..",
+    "start-user-app": "cd ./apps/user-app && npm run start",
     "start-webhook-handler": "cd ./apps/webhook-handler && npm run dev"
   },
   "devDependencies": {

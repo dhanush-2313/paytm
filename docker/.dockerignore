@@ -1,2 +1,4 @@
 ../app/user-app/node_modules
 ../app/bank-webhook-handler/node_modules
+node_modules
+Dockerfile
