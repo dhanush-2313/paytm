@@ -41,3 +41,28 @@ jobs:
           file: ./docker/Dockerfile.webhook
           push: true
           tags: dhanush2313/cicd:webhook-handler-latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo docker network create my_network || true
+
+            sudo docker pull dhanush2313/cicd:db-latest
+            sudo docker pull dhanush2313/cicd:user-app-latest
+            sudo docker pull dhanush2313/cicd:webhook-handler-latest
+
+            sudo docker stop db || true
+            sudo docker rm db || true
+            sudo docker run -d --name db --network my_network -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=bruh123 -e POSTGRES_DB=postgres -p 5432:5432 dhanush2313/cicd:db-latest
+
+            sudo docker stop user-app || true
+            sudo docker rm user-app || true
+            sudo docker run -d --name user-app --network my_network -e DATABASE_URL=postgresql://postgres:bruh123@db:5432/postgres -e WEBHOOK_URL=http://webhook-handler:3003 -p 3001:3001 dhanush2313/cicd:user-app-latest
+
+            sudo docker stop webhook-handler || true
+            sudo docker rm webhook-handler || true
+            sudo docker run -d --name webhook-handler --network my_network -e DATABASE_URL=postgresql://postgres:bruh123@db:5432/postgres -e PORT=3003 -p 3003:3003 dhanush2313/cicd:webhook-handler-latest
