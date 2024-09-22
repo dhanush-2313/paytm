@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   db:
@@ -11,6 +10,7 @@ services:
       - my_network
     ports:
       - "5432:5432"
+    restart: always
 
   user-app:
     build:
@@ -25,6 +25,15 @@ services:
       - my_network
     ports:
       - "3001:3001"
+    develop:
+      watch:
+      - path: package*.json
+        action: rebuild
+      - path: ./app/user-app/package*.json
+        action: rebuild
+      - path: ./app/user-app/
+        target: /usr/src/app
+        action: sync 
 
   webhook-handler:
     build:
