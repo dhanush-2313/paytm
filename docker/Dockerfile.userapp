@@ -7,6 +7,9 @@ COPY package.json package-lock.json turbo.json tsconfig.json ./
 COPY apps ./apps
 COPY packages ./packages
 
+ENV DATABASE_URL=postgresql://postgres:bruh123@db:5432/postgres
+
+
 RUN npm install
 
 RUN npm run db:generate

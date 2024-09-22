@@ -24,7 +24,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.userapp
           push: true
-          tags: dhanush-2313/user-app:latest
+          tags: dhanush2313/cicd:user-app-latest
 
       - name: Build and Push Webhook Handler Image
         uses: docker/build-push-action@v2
@@ -32,7 +32,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.webhook
           push: true
-          tags: dhanush-2313/webhook-handler:latest
+          tags: dhanush2313/cicd:webhook-handler-latest
 
       - name: Install Docker Compose
         run: |
